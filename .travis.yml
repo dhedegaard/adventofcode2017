@@ -6,6 +6,6 @@ rust:
 
 script:
   # Start by running all the tests.
-  - find . -maxdepth 1 -type d -name "day*" -print -exec sh -c "cd {} && cargo test" \;
+  - find . -maxdepth 1 -type d -name "day*" -print -exec sh -c "cd {} && cargo test -q" \;
   # Then run the programs.
-  - find . -maxdepth 1 -type d -name "day*" -print -exec sh -c "cd {} && cargo run --release" \;
+  - find . -maxdepth 1 -type d -name "day*" -print -exec sh -c "cd {} && cargo run -q --release" \;
