@@ -1,0 +1,11 @@
+language: rust
+
+rust:
+  - stable
+  - nightly
+
+script:
+  # Start by running all the tests.
+  - find . -type d -name "day*" -print -exec cargo test {} \;
+  # Then run the programs.
+  - find . -type d -name "day*" -print -exec cargo run {} \;
