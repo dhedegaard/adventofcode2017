@@ -1,4 +1,6 @@
 #!/bin/sh
+set -e
+
 find . \
   -type d \
   -name "day*" | sort | while read fname
