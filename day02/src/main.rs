@@ -1,6 +1,7 @@
 extern crate time;
 
 use std::error::Error;
+use time::now;
 
 fn calculate_checksum(spreadsheet: &str) -> Result<u32, Box<Error>> {
     let mut sum = 0;
@@ -25,10 +26,11 @@ fn calculate_checksum_part2(spreadsheet: &str) -> Result<u32, Box<Error>> {
     let mut sum = 0;
     for line in spreadsheet.lines() {
         let mut diff = 0;
-        for c1 in line.split_whitespace() {
-            let c1 = c1.parse::<u32>()?;
-            for c2 in line.split_whitespace() {
-                let c2 = c2.parse::<u32>()?;
+        let line = line.split_whitespace()
+            .map(|e| e.parse::<u32>().unwrap())
+            .collect::<Vec<u32>>();
+        for c1 in &line {
+            for c2 in &line {
                 if c1 < c2 && c2 % c1 == 0 {
                     if c2 / c1 > diff {
                         diff = c2 / c1;
