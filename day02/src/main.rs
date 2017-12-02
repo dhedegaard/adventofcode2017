@@ -8,7 +8,7 @@ fn calculate_checksum(spreadsheet: &str) -> Result<u32, Box<Error>> {
         let mut max = 0;
         let mut min = 999999;
         for c in line.split_whitespace() {
-            let c = c.parse::<u32>()?; // .ok_or("Part of the captcha is not a digit")?;
+            let c = c.parse::<u32>()?;
             if c < min {
                 min = c;
             }
