@@ -4,20 +4,15 @@ use std::error::Error;
 use time::now;
 
 fn calculate_checksum(spreadsheet: &str) -> Result<u32, Box<Error>> {
-    let mut sum = 0;
+    let mut sum: u32 = 0;
     for line in spreadsheet.lines() {
-        let mut max = 0;
-        let mut min = 999999;
-        for c in line.split_whitespace() {
-            let c = c.parse::<u32>()?;
-            if c < min {
-                min = c;
-            }
-            if c > max {
-                max = c;
-            }
-        }
-        sum += max - min;
+        let numbers = line.split_whitespace()
+            .map(&str::parse::<u32>)
+            .filter(Result::is_ok)
+            .map(Result::unwrap)
+            .collect::<Vec<_>>();
+        sum +=
+            numbers.iter().max_by_key(|&e| e).unwrap() - numbers.iter().min_by_key(|&e| e).unwrap();
     }
     return Ok(sum);
 }
@@ -27,14 +22,14 @@ fn calculate_checksum_part2(spreadsheet: &str) -> Result<u32, Box<Error>> {
     for line in spreadsheet.lines() {
         let mut diff = 0;
         let line = line.split_whitespace()
-            .map(|e| e.parse::<u32>().unwrap())
-            .collect::<Vec<u32>>();
+            .map(&str::parse::<u32>)
+            .filter(Result::is_ok)
+            .map(Result::unwrap)
+            .collect::<Vec<_>>();
         for c1 in &line {
             for c2 in &line {
-                if c1 < c2 && c2 % c1 == 0 {
-                    if c2 / c1 > diff {
-                        diff = c2 / c1;
-                    }
+                if c1 < c2 && c2 % c1 == 0 && c2 / c1 > diff {
+                    diff = c2 / c1;
                 }
             }
         }
