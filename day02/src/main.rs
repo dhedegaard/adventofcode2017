@@ -1,9 +1,8 @@
 extern crate time;
 
-use std::error::Error;
 use time::now;
 
-fn calculate_checksum(spreadsheet: &str) -> Result<u32, Box<Error>> {
+fn calculate_checksum(spreadsheet: &str) -> u32 {
     let mut sum: u32 = 0;
     for line in spreadsheet.lines() {
         let numbers = line.split_whitespace()
@@ -14,10 +13,10 @@ fn calculate_checksum(spreadsheet: &str) -> Result<u32, Box<Error>> {
         sum +=
             numbers.iter().max_by_key(|&e| e).unwrap() - numbers.iter().min_by_key(|&e| e).unwrap();
     }
-    return Ok(sum);
+    sum
 }
 
-fn calculate_checksum_part2(spreadsheet: &str) -> Result<u32, Box<Error>> {
+fn calculate_checksum_part2(spreadsheet: &str) -> u32 {
     let mut sum = 0;
     for line in spreadsheet.lines() {
         let mut diff = 0;
@@ -35,7 +34,7 @@ fn calculate_checksum_part2(spreadsheet: &str) -> Result<u32, Box<Error>> {
         }
         sum += diff;
     }
-    return Ok(sum);
+    sum
 }
 
 const INPUT: &'static str = "86	440	233	83	393	420	228	491	159	13	110	135	97	238	92	396
@@ -58,12 +57,12 @@ const INPUT: &'static str = "86	440	233	83	393	420	228	491	159	13	110	135	97	238
 fn main() {
     {
         let before = now();
-        let result = calculate_checksum(INPUT).unwrap();
+        let result = calculate_checksum(INPUT);
         println!("part1: {} - took: {}", result, now() - before);
     }
     {
         let before = now();
-        let result = calculate_checksum_part2(INPUT).unwrap();
+        let result = calculate_checksum_part2(INPUT);
         println!("part2: {} - took: {}", result, now() - before);
     }
 }
@@ -80,14 +79,14 @@ mod tests {
                 "5 1 9 5
 7 5 3
 2 4 6 8"
-            ).unwrap(),
+            ),
             18
         );
     }
 
     #[test]
     fn part1_result() {
-        assert_eq!(calculate_checksum(INPUT).unwrap(), 45158)
+        assert_eq!(calculate_checksum(INPUT), 45158)
     }
 
     #[test]
@@ -97,13 +96,13 @@ mod tests {
                 "5 9 2 8
 9 4 7 3
 3 8 6 5"
-            ).unwrap(),
+            ),
             9
         );
     }
 
     #[test]
     fn part2_result() {
-        assert_eq!(calculate_checksum_part2(INPUT).unwrap(), 294)
+        assert_eq!(calculate_checksum_part2(INPUT), 294)
     }
 }
