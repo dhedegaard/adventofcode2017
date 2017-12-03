@@ -20,7 +20,7 @@ struct Point {
 type Grid = HashMap<Point, u32>;
 
 fn calculate_manhattan_distance(input: u32) -> u32 {
-    let mut dir: Direction = Direction::Right;
+    let mut dir = Direction::Right;
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     for _ in 1..input {
@@ -49,9 +49,9 @@ fn calculate_manhattan_distance(input: u32) -> u32 {
 }
 
 fn calculate_manhattan_distance_part2(input: u32) -> u32 {
-    let mut grid: Grid = HashMap::new();
+    let mut grid = Grid::new();
     grid.insert(Point { x: 0, y: 0 }, 1);
-    let mut dir: Direction = Direction::Right;
+    let mut dir = Direction::Right;
     let mut x: i32 = 0;
     let mut y: i32 = 0;
     loop {
