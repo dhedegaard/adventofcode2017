@@ -10,5 +10,10 @@
 			"path": "day03"
 		}
 	],
+	"extensions": {
+		"recommendations": [
+			"rust-lang.rust"
+		]
+	},
 	"settings": {}
 }
