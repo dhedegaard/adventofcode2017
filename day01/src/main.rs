@@ -43,11 +43,21 @@ mod tests {
     }
 
     #[test]
+    fn part1_result() {
+        assert_eq!(calculate_captcha(INPUT, 1).unwrap(), 1158);
+    }
+
+    #[test]
     fn part2_examples() {
         assert_eq!(calculate_captcha("1212", 2).unwrap(), 6);
         assert_eq!(calculate_captcha("1221", 2).unwrap(), 0);
         assert_eq!(calculate_captcha("123425", 3).unwrap(), 4);
         assert_eq!(calculate_captcha("123123", 3).unwrap(), 12);
         assert_eq!(calculate_captcha("12131415", 4).unwrap(), 4);
+    }
+
+    #[test]
+    fn part2_result() {
+        assert_eq!(calculate_captcha(INPUT, INPUT.len() / 2).unwrap(), 1132);
     }
 }

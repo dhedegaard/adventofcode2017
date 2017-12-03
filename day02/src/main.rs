@@ -91,6 +91,11 @@ mod tests {
     }
 
     #[test]
+    fn part1_result() {
+        assert_eq!(calculate_checksum(INPUT).unwrap(), 45158)
+    }
+
+    #[test]
     fn part2_examples() {
         assert_eq!(
             calculate_checksum_part2(
@@ -100,5 +105,10 @@ mod tests {
             ).unwrap(),
             9
         );
+    }
+
+    #[test]
+    fn part2_result() {
+        assert_eq!(calculate_checksum_part2(INPUT).unwrap(), 294)
     }
 }
