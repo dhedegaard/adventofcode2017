@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "day03"
+		},
+		{
+			"path": "day04"
 		}
 	],
 	"extensions": {
