@@ -2,8 +2,8 @@
 set -e
 
 find . \
-  -type d \
   -maxdepth 1 \
+  -type d \
   -name "day*" | sort | while read fname
 do
     echo "*** $fname ***"
