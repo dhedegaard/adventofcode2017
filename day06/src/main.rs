@@ -84,16 +84,11 @@ mod tests {
 
     #[test]
     fn part1_result() {
-        assert_eq!(
-            debug_steps(
-                INPUT
-                    .split_whitespace()
-                    .map(|e| e.parse::<u32>().unwrap())
-                    .collect::<Vec<_>>(),
-                false
-            ),
-            6681
-        );
+        let input = INPUT
+            .split_whitespace()
+            .map(|e| e.parse::<u32>().unwrap())
+            .collect::<Vec<_>>();
+        assert_eq!(debug_steps(input, false), 6681);
     }
 
     #[test]
@@ -103,16 +98,11 @@ mod tests {
 
     #[test]
     fn part2_result() {
-        assert_eq!(
-            debug_steps(
-                INPUT
-                    .split_whitespace()
-                    .map(|e| e.parse::<u32>().unwrap())
-                    .collect::<Vec<_>>(),
-                true
-            ),
-            2392
-        );
+        let input = INPUT
+            .split_whitespace()
+            .map(|e| e.parse::<u32>().unwrap())
+            .collect::<Vec<_>>();
+        assert_eq!(debug_steps(input, true), 2392);
     }
 }
 
