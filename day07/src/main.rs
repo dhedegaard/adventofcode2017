@@ -179,14 +179,20 @@ cntj (57)";
     fn part2_example() {
         let programs = parse(TEST_INPUT);
         let root = find_bottom_program(programs.to_owned());
-        assert_eq!(fix_bad_weight(programs.to_owned(), programs.get(&root).unwrap().to_owned()).unwrap(), 60);
+        assert_eq!(
+            fix_bad_weight(programs.to_owned(), programs.get(&root).unwrap().to_owned()).unwrap(),
+            60
+        );
     }
 
     #[test]
     fn part2_result() {
         let programs = parse(INPUT);
         let root = find_bottom_program(programs.to_owned());
-        assert_eq!(fix_bad_weight(programs.to_owned(), programs.get(&root).unwrap().to_owned()).unwrap(), 1853);
+        assert_eq!(
+            fix_bad_weight(programs.to_owned(), programs.get(&root).unwrap().to_owned()).unwrap(),
+            1853
+        );
     }
 }
 
