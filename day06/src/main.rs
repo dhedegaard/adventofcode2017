@@ -19,8 +19,8 @@ fn debug_steps(memory_banks: Vec<u32>, find_loop_length: bool) -> u32 {
                 .rev()
                 .max_by_key(|&(_, e)| e)
                 .unwrap();
-            hm_index = hm_tuple.0.clone();
-            hm_value = hm_tuple.1.clone();
+            hm_index = hm_tuple.0.to_owned();
+            hm_value = hm_tuple.1.to_owned();
         }
 
         // Reset the memory value of the high memory index.
@@ -44,7 +44,7 @@ fn debug_steps(memory_banks: Vec<u32>, find_loop_length: bool) -> u32 {
             break;
         }
         // Otherwise add the memory to the seen set.
-        seen.insert(memory.iter().map(|e| *e).collect::<Vec<_>>(), steps);
+        seen.insert(memory.clone(), steps);
     }
 
     if find_loop_length {
