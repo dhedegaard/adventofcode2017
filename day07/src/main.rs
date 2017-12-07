@@ -149,7 +149,7 @@ fn main() {
 mod tests {
     use super::*;
 
-    pub const TEST_INPUT: &'static str = "pbga (66)
+    const TEST_INPUT: &'static str = "pbga (66)
 xhth (57)
 ebii (61)
 havc (66)
