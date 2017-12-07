@@ -1,5 +1,6 @@
 extern crate time;
 
+use std::option::Option;
 use std::collections::{HashMap, HashSet};
 use time::now;
 
@@ -7,10 +8,29 @@ use time::now;
 struct Program {
     name: String,
     weight: u32,
+    aggregated_weight: u32,
     programs: Vec<String>,
 }
 
-fn parse(input: &str) -> HashMap<String, Program> {
+impl Program {
+    fn aggregated_sum(&mut self, programs: Programs) -> u32 {
+        if self.aggregated_weight != 0 {
+            return self.aggregated_weight;
+        }
+
+        let mut sum = self.weight;
+        for program in self.programs.to_owned() {
+            let program = programs.get(&program).unwrap();
+            sum += program.to_owned().aggregated_sum(programs.to_owned());
+        }
+        self.aggregated_weight = sum.to_owned();
+        sum
+    }
+}
+
+type Programs = HashMap<String, Program>;
+
+fn parse(input: &str) -> Programs {
     let mut result = HashMap::new();
 
     // Parse all the program names/weights.
@@ -41,6 +61,7 @@ fn parse(input: &str) -> HashMap<String, Program> {
                 name: name.clone(),
                 weight: weight,
                 programs: programs,
+                aggregated_weight: 0,
             },
         );
     }
@@ -48,7 +69,7 @@ fn parse(input: &str) -> HashMap<String, Program> {
     result
 }
 
-fn find_bottom_program<'a>(programs: HashMap<String, Program>) -> String {
+fn find_bottom_program(programs: HashMap<String, Program>) -> String {
     let referenced = programs
         .values()
         .flat_map(|e| e.programs.clone())
@@ -63,12 +84,64 @@ fn find_bottom_program<'a>(programs: HashMap<String, Program>) -> String {
         .name
 }
 
+fn fix_bad_weight(programs: Programs, root: Program) -> Option<u32> {
+    let mut weights: HashMap<u32, u32> = HashMap::new();
+    let mut weights_program: HashMap<u32, String> = HashMap::new();
+    for program in root.programs {
+        let program = programs.get(&program).unwrap();
+        let agg_sum = program.to_owned().aggregated_sum(programs.to_owned());
+
+        // Aggregate all the aggregated weights, to find the outlier.
+        let new_weight = weights.get(&agg_sum).unwrap_or(&0) + 1;
+        weights.insert(agg_sum, new_weight);
+
+        if !weights_program.contains_key(&agg_sum) {
+            weights_program.insert(agg_sum, program.name.to_owned());
+        }
+    }
+
+    // If multiple weights exists, find the one with only one
+    if weights.len() > 1 {
+        // Determine the bad weight, correct weight and the bad program.
+        let bad_weight = weights
+            .iter()
+            .filter(|&(_, v)| *v == 1)
+            .map(|(k, _)| k)
+            .next()
+            .unwrap();
+        let correct_weight = weights.keys().filter(|k| *k != bad_weight).next().unwrap();
+        let bad_program = programs
+            .get(weights_program.get(bad_weight).unwrap())
+            .unwrap();
+
+        // If recursing on the bad program returns `Some` result, return that
+        // one for balancing the programs.
+        let potential_result = fix_bad_weight(programs.to_owned(), bad_program.to_owned());
+        if !potential_result.is_none() {
+            return potential_result;
+        }
+
+        // Otherwise, balance the weight on this level of recursion.
+        let balanced_weight = bad_program.weight + correct_weight - bad_weight;
+        return Some(balanced_weight.to_owned());
+    }
+
+    None
+}
+
 fn main() {
     let programs = parse(INPUT);
     {
         let before = now();
-        let result = find_bottom_program(programs);
+        let result = find_bottom_program(programs.clone());
         println!("part1: {}\ttook: {}", result, now() - before);
+    }
+    let root = find_bottom_program(programs.clone());
+    {
+        let before = now();
+        let result =
+            fix_bad_weight(programs.clone(), programs.get(&root).unwrap().to_owned()).unwrap();
+        println!("part2: {}\ttook: {}", result, now() - before);
     }
 }
 
@@ -76,7 +149,7 @@ fn main() {
 mod tests {
     use super::*;
 
-    const TEST_INPUT: &'static str = "pbga (66)
+    pub const TEST_INPUT: &'static str = "pbga (66)
 xhth (57)
 ebii (61)
 havc (66)
@@ -94,6 +167,26 @@ cntj (57)";
     fn part1_example() {
         let programs = parse(TEST_INPUT);
         assert_eq!(find_bottom_program(programs), "tknk");
+    }
+
+    #[test]
+    fn part1_result() {
+        let programs = parse(INPUT);
+        assert_eq!(find_bottom_program(programs), "hmvwl");
+    }
+
+    #[test]
+    fn part2_example() {
+        let programs = parse(TEST_INPUT);
+        let root = find_bottom_program(programs.to_owned());
+        assert_eq!(fix_bad_weight(programs.to_owned(), programs.get(&root).unwrap().to_owned()).unwrap(), 60);
+    }
+
+    #[test]
+    fn part2_result() {
+        let programs = parse(INPUT);
+        let root = find_bottom_program(programs.to_owned());
+        assert_eq!(fix_bad_weight(programs.to_owned(), programs.get(&root).unwrap().to_owned()).unwrap(), 1853);
     }
 }
 
