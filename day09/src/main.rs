@@ -87,6 +87,11 @@ mod tests {
     }
 
     #[test]
+    fn part1_result() {
+        assert_eq!(calc_score(&get_input(), false), 14204);
+    }
+
+    #[test]
     fn part2_example() {
         assert_eq!(calc_score("<>", true), 0);
         assert_eq!(calc_score("<random characters>", true), 17);
@@ -95,5 +100,10 @@ mod tests {
         assert_eq!(calc_score("<!!>", true), 0);
         assert_eq!(calc_score("<!!!>>", true), 0);
         assert_eq!(calc_score("<{o\"i!a,<{i<a>", true), 10);
+    }
+
+    #[test]
+    fn part2_result() {
+        assert_eq!(calc_score(&get_input(), true), 6622);
     }
 }
