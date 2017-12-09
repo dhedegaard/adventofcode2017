@@ -22,8 +22,6 @@ fn calc_score(input: &str, part2: bool) -> u32 {
         if !in_garbage {
             if c == '<' {
                 in_garbage = true;
-            } else if c == '>' {
-                in_garbage = false;
             } else if c == '{' {
                 if !part2 {
                     depth += 1;
