@@ -25,12 +25,14 @@ fn calc_score(input: &str, part2: bool) -> u32 {
             } else if c == '>' {
                 in_garbage = false;
             } else if c == '{' {
-                depth += 1;
+                if !part2 {
+                    depth += 1;
+                }
             } else if c == '}' {
                 if !part2 {
                     result += depth;
+                    depth -= 1;
                 }
-                depth -= 1;
             }
         } else {
             if c == '>' {
