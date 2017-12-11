@@ -68,7 +68,7 @@ fn part2(input: &Vec<u8>) -> String {
     for i in 0..result.len() / 16 {
         let slice = result
             .iter()
-            .skip(i)
+            .skip(i * 16)
             .take(16)
             .map(|e| *e)
             .collect::<Vec<_>>();
