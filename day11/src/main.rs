@@ -33,7 +33,7 @@ fn shortest_path(path: &str, part2: bool) -> u32 {
         // Probably not that efficient, due to calculating steps after each
         // path change, but fast it enough it seems :)
         if part2 {
-            let new_max_steps = calculate_least_amount_of_movex(x, y);
+            let new_max_steps = calculate_least_amount_of_moves(x, y);
             if new_max_steps > max_steps {
                 max_steps = new_max_steps;
             }
@@ -43,48 +43,11 @@ fn shortest_path(path: &str, part2: bool) -> u32 {
     if part2 {
         return max_steps;
     }
-    calculate_least_amount_of_movex(x, y)
+    calculate_least_amount_of_moves(x, y)
 }
 
-fn calculate_least_amount_of_movex(x: i32, y: i32) -> u32 {
-    let (mut x, mut y, mut steps) = (x.to_owned(), y.to_owned(), 0);
-
-    // Based on the position, move back towards spawn.
-    while x != 0 || y != 0 {
-        // Start by incrementing the move counter.
-        steps += 1;
-
-        if x == 0 {
-            // If we're done moving to the sides, move up and down.
-            if y > 0 {
-                // Move: s
-                y -= 2;
-            } else {
-                // Move: n
-                y += 2;
-            }
-        } else if x < 0 && y < 0 {
-            // Move: se
-            x += 1;
-            y += 1;
-        } else if x > 0 && y < 0 {
-            // Move: sw
-            x -= 1;
-            y += 1;
-        } else if x > 0 && y >= 0 {
-            // Move: nw
-            x -= 1;
-            y -= 1;
-        } else if x < 0 && y >= 0 {
-            // Move: ne
-            x += 1;
-            y -= 1;
-        } else {
-            panic!(format!("X: {}, Y: {}", x, y));
-        }
-    }
-
-    steps
+fn calculate_least_amount_of_moves(x: i32, y: i32) -> u32 {
+    (x.abs() as u32 + y.abs() as u32) / 2
 }
 
 fn get_input() -> String {
