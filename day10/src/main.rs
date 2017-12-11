@@ -23,16 +23,18 @@ fn rev_sublist(input: &mut Vec<i32>, index: usize, len: usize) {
     }
 }
 
-fn hash(input: Vec<i32>, input_lengths: Vec<i32>) -> Vec<i32> {
+fn hash(input: Vec<i32>, input_lengths: Vec<i32>, runs: usize) -> Vec<i32> {
     let mut elems = input.iter().map(|e| *e).collect::<Vec<i32>>();
     let mut cur_pos = 0;
     let mut skip_size = 0;
 
-    for length in input_lengths {
-        rev_sublist(&mut elems, cur_pos, length as usize);
+    for _ in 0..runs {
+        for length in input_lengths.to_owned() {
+            rev_sublist(&mut elems, cur_pos, length as usize);
 
-        cur_pos = (cur_pos + length as usize + skip_size) % input.len();
-        skip_size += 1;
+            cur_pos = (cur_pos + length as usize + skip_size) % input.len();
+            skip_size += 1;
+        }
     }
     elems
 }
@@ -42,15 +44,28 @@ fn calculate_result(hash: &Vec<i32>) -> i32 {
 }
 
 fn main() {
-    let input = INPUT
-        .split(",")
-        .map(|e| e.parse::<i32>().unwrap())
-        .collect::<Vec<_>>();
     {
+        let input = INPUT
+            .split(",")
+            .map(|e| e.parse::<i32>().unwrap())
+            .collect::<Vec<_>>();
         let before = now();
-        let result = calculate_result(&hash((0..256).collect::<Vec<_>>(), input));
+        let result = calculate_result(&hash((0..256).collect::<Vec<_>>(), input, 1));
         println!("part1: {}\ttook: {}", result, now() - before);
     }
+    {
+        let input = get_input_part2(INPUT);
+        // TODO: let result = hash((0..256).collect::<Vec<_>>(), input, 64);
+        // Build the dense hash
+        // Convert to hex
+    }
+}
+
+fn get_input_part2(input: &str) -> Vec<u8> {
+    let mut result = Vec::with_capacity(input.len() + 5);
+    result.extend(input.as_bytes());
+    result.extend(&[17, 31, 73, 47, 23]);
+    result
 }
 
 #[cfg(test)]
@@ -74,7 +89,7 @@ mod tests {
     #[test]
     fn test_examples1() {
         assert_eq!(
-            hash(vec![0, 1, 2, 3, 4], vec![3, 4, 1, 5]),
+            hash(vec![0, 1, 2, 3, 4], vec![3, 4, 1, 5], 1),
             vec![3, 4, 2, 1, 0]
         );
     }
@@ -85,9 +100,16 @@ mod tests {
             .split(",")
             .map(|e| e.parse::<i32>().unwrap())
             .collect::<Vec<_>>();
+        let calculated_hash = hash((0..256).collect::<Vec<_>>(), input, 1);
+        assert_eq!(calculate_result(&calculated_hash), 212);
+    }
+
+    #[test]
+    fn test_parse2() {
+        let input = "1,2,3";
         assert_eq!(
-            calculate_result(&hash((0..256).collect::<Vec<_>>(), input)),
-            212
+            get_input_part2(&input),
+            vec![49, 44, 50, 44, 51, 17, 31, 73, 47, 23]
         );
     }
 }
