@@ -48,9 +48,10 @@ fn main() {
         println!("part1: {}\ttook: {}", result, now() - before);
     }
     {
-        // Fetch the input as an ASCII byte vector.
         let input = get_input_part2(INPUT);
-        println!("part2: {}", part2(&input));
+        let before = now();
+        let result = part2(&input);
+        println!("part2: {}\ttook: {}", result, now() - before);
     }
 }
 
@@ -159,10 +160,28 @@ mod tests {
 
     #[test]
     fn test_examples2() {
-        assert_eq!(part2(&get_input_part2("")), "a2582a3a0e66e6e86e3812dcb672a272");
-        assert_eq!(part2(&get_input_part2("AoC 2017")), "33efeb34ea91902bb2f59c9920caa6cd");
-        assert_eq!(part2(&get_input_part2("1,2,3")), "3efbe78a8d82f29979031a4aa0b16a9d");
-        assert_eq!(part2(&get_input_part2("1,2,4")), "63960835bcdc130f0b66d7ff4f6a5a8e");
+        assert_eq!(
+            part2(&get_input_part2("")),
+            "a2582a3a0e66e6e86e3812dcb672a272"
+        );
+        assert_eq!(
+            part2(&get_input_part2("AoC 2017")),
+            "33efeb34ea91902bb2f59c9920caa6cd"
+        );
+        assert_eq!(
+            part2(&get_input_part2("1,2,3")),
+            "3efbe78a8d82f29979031a4aa0b16a9d"
+        );
+        assert_eq!(
+            part2(&get_input_part2("1,2,4")),
+            "63960835bcdc130f0b66d7ff4f6a5a8e"
+        );
+    }
+
+    #[test]
+    fn test_result2() {
+        let input = get_input_part2(INPUT);
+        assert_eq!(part2(&input), "96de9657665675b51cd03f0b3528ba26");
     }
 }
 
