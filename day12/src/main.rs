@@ -123,13 +123,13 @@ mod tests {
     }
 
     #[test]
-    fn part2_examles() {
+    fn part2_examples() {
         let input = parse_programs(TEST_INPUT);
         assert_eq!(count_program_groups(&input), 2);
     }
 
     #[test]
-    fn part2_examles() {
+    fn part2_result() {
         let input = parse_programs(&get_input());
         assert_eq!(count_program_groups(&input), 193);
     }
