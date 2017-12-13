@@ -18,7 +18,7 @@ fn parse(input: &str) -> Firewall {
     result
 }
 
-fn calculate_severity(firewall: &Firewall, offset: u32) -> (u32, bool) {
+fn calculate_severity(firewall: &Firewall, offset: u32, break_on_caught: bool) -> (u32, bool) {
     let max_key = firewall.keys().max_by_key(|e| *e).unwrap();
     let mut severity = 0;
     let mut caught = false;
@@ -28,6 +28,9 @@ fn calculate_severity(firewall: &Firewall, offset: u32) -> (u32, bool) {
         }
         let range = firewall.get(&depth).unwrap();
         if (depth + offset) % (2 * range - 2) == 0 {
+            if break_on_caught {
+                return (depth * range, true)
+            }
             severity += depth * range;
             if !caught {
                 caught = true;
@@ -48,7 +51,7 @@ fn get_input() -> String {
 
 fn determine_delay(firewall: &Firewall) -> u32 {
     let mut delay = 0;
-    while calculate_severity(firewall, delay).1 {
+    while calculate_severity(firewall, delay, true).1 {
         delay += 1;
     }
     delay
@@ -58,7 +61,7 @@ fn main() {
     let input = parse(&get_input());
     {
         let before = now();
-        let result = calculate_severity(&input, 0).0;
+        let result = calculate_severity(&input, 0, false).0;
         println!("part1: {:?}\ttook: {}", result, now() - before);
     }
     {
@@ -80,18 +83,24 @@ mod tests {
     #[test]
     fn part1_examles() {
         let input = parse(TEST_INPUT);
-        assert_eq!(calculate_severity(&input, 0).0, 24);
+        assert_eq!(calculate_severity(&input, 0, false).0, 24);
     }
 
     #[test]
     fn part1_result() {
         let input = parse(&get_input());
-        assert_eq!(calculate_severity(&input, 0).0, 648);
+        assert_eq!(calculate_severity(&input, 0, false).0, 648);
     }
 
     #[test]
     fn part2_examles() {
         let input = parse(TEST_INPUT);
         assert_eq!(determine_delay(&input), 10);
+    }
+
+    #[test]
+    fn part2_results() {
+        let input = parse(&get_input());
+        assert_eq!(calculate_severity(&input, 3933124, true).0, 0);
     }
 }
