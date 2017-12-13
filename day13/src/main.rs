@@ -1,35 +1,37 @@
 extern crate time;
 
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
 use time::now;
 
-type Firewall = HashMap<u32, u32>;
+type Firewall = Vec<u32>;
 
 fn parse(input: &str) -> Firewall {
+
     let mut result = Firewall::new();
     for line in input.lines() {
         let splitted = line.split(": ")
             .map(|e| e.parse::<u32>().unwrap())
             .collect::<Vec<_>>();
-        result.insert(splitted[0].to_owned(), splitted[1]);
+        while result.len() < splitted[0] as usize {
+            result.push(0);
+        }
+        result.insert(splitted[0].to_owned() as usize, splitted[1]);
     }
     result
 }
 
 fn calculate_severity(firewall: &Firewall, offset: u32, break_on_caught: bool) -> (u32, bool) {
-    let max_key = firewall.keys().max_by_key(|e| *e).unwrap();
     let mut severity = 0;
     let mut caught = false;
-    for depth in 0..max_key + 1 {
-        if !firewall.contains_key(&depth) {
+    for (depth, range) in firewall.iter().enumerate() {
+        if *range == 0 {
             continue;
         }
-        let range = firewall.get(&depth).unwrap();
+        let depth = depth as u32;
         if (depth + offset) % (2 * range - 2) == 0 {
             if break_on_caught {
-                return (depth * range, true)
+                return (depth as u32 * range, true)
             }
             severity += depth * range;
             if !caught {
