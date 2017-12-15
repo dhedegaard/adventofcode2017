@@ -72,9 +72,21 @@ mod tests {
     }
 
     #[test]
+    fn test_result1() {
+        let result = calculate(INPUT.0, INPUT.1, &None, &None, 40_000_000);
+        assert_eq!(result, 619);
+    }
+
+    #[test]
     fn test_examples2() {
         let result = calculate(TEST_INPUT.0, TEST_INPUT.1, &Some(4), &Some(8), 5_000_000);
         assert_eq!(result, 309);
+    }
+
+    #[test]
+    fn test_result2() {
+        let result = calculate(INPUT.0, INPUT.1, &Some(4), &Some(8), 5_000_000);
+        assert_eq!(result, 290);
     }
 }
 
