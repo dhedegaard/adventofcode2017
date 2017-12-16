@@ -44,6 +44,9 @@
 		},
 		{
 			"path": "day15"
+		},
+		{
+			"path": "day16"
 		}
 	],
 	"extensions": {
