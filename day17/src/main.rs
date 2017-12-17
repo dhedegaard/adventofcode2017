@@ -32,6 +32,24 @@ impl Spinlock {
     }
 }
 
+fn part2() -> usize {
+    let mut pos = 0;
+    let mut result = 0;
+    // Using a spinlock in memory is too expensive, just simulate it.
+    for value in 1..50_000_001 {
+        // Push the position based on the stepping, modulo with the value
+        // (which is otherwise the size of the buffer - 1).
+        pos = (pos + INPUT) % value + 1;
+        // If we're at position 1, then we're just after the 0, since 0 is the
+        // only position that never changes, due to always inserting after a
+        // position.
+        if pos == 1 {
+            result = value;
+        }
+    }
+    result
+}
+
 fn main() {
     {
         let before = now();
@@ -43,18 +61,7 @@ fn main() {
     }
     {
         let before = now();
-        let mut pos = 0;
-        let mut result = 0;
-        // Using a spinlock in memory is too expensive, just simulate it.
-        for value in 1..50_000_001 {
-            // Push the position based on the stepping, modulo with the value
-            // (which is otherwise the size of the buffer - 1).
-            pos = (pos + INPUT) % value + 1;
-            // If we're at the beginning, part the value as being a possible result.
-            if pos == 1 {
-                result = value;
-            }
-        }
+        let result = part2();
         println!("part2: {}\ttook: {}", result, now() - before);
     }
 }
@@ -66,7 +73,7 @@ mod tests {
     const TEST_INPUT: usize = 3;
 
     #[test]
-    fn fn_example1() {
+    fn test_step_forward() {
         let mut spinlock = Spinlock::new(10);
         assert_eq!(spinlock.buffer, Box::new(vec![0]));
         assert_eq!(spinlock.pos, 0);
@@ -82,13 +89,28 @@ mod tests {
     }
 
     #[test]
-    fn fn_examples1() {
+    fn test_examples1() {
         let mut spinlock = Spinlock::new(2018);
         for value in 1..2018 {
             spinlock.step_forward(3, value);
         }
         assert_eq!(spinlock.buffer[spinlock.pos], 2017);
         assert_eq!(spinlock.result(), 638);
+    }
+
+    #[test]
+    fn test_result1() {
+        let mut spinlock = Spinlock::new(2018);
+        for value in 1..2018 {
+            spinlock.step_forward(INPUT, value);
+        }
+        assert_eq!(spinlock.buffer[spinlock.pos], 2017);
+        assert_eq!(spinlock.result(), 596);
+    }
+
+    #[test]
+    fn test_result2() {
+        assert_eq!(part2(), 39051595);
     }
 }
 
