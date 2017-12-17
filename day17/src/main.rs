@@ -55,7 +55,7 @@ fn main() {
                 result = value;
             }
         }
-        println!("part1: {}\ttook: {}", result, now() - before);
+        println!("part2: {}\ttook: {}", result, now() - before);
     }
 }
 
@@ -63,18 +63,20 @@ fn main() {
 mod tests {
     use super::*;
 
+    const TEST_INPUT: usize = 3;
+
     #[test]
     fn fn_example1() {
         let mut spinlock = Spinlock::new(10);
         assert_eq!(spinlock.buffer, Box::new(vec![0]));
         assert_eq!(spinlock.pos, 0);
-        spinlock.step_forward(3, 1);
+        spinlock.step_forward(TEST_INPUT, 1);
         assert_eq!(spinlock.buffer, Box::new(vec![0, 1]));
         assert_eq!(spinlock.pos, 1);
-        spinlock.step_forward(3, 2);
+        spinlock.step_forward(TEST_INPUT, 2);
         assert_eq!(spinlock.buffer, Box::new(vec![0, 2, 1]));
         assert_eq!(spinlock.pos, 1);
-        spinlock.step_forward(3, 3);
+        spinlock.step_forward(TEST_INPUT, 3);
         assert_eq!(spinlock.buffer, Box::new(vec![0, 2, 3, 1]));
         assert_eq!(spinlock.pos, 2);
     }
