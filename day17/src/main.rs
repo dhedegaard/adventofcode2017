@@ -27,13 +27,8 @@ impl Spinlock {
         self.buffer.insert(self.pos, value);
     }
 
-    fn result1(&self) -> i32 {
+    fn result(&self) -> i32 {
         self.buffer[self.pos + 1]
-    }
-
-    fn result2(&self) -> i32 {
-        let zeroes_position = self.buffer.iter().position(|e| *e == 0).unwrap();
-        self.buffer[zeroes_position + 1]
     }
 }
 
@@ -44,16 +39,23 @@ fn main() {
         for value in 1..2018 {
             spinlock.step_forward(INPUT, value);
         }
-        println!("part1: {}\ttook: {}", spinlock.result1(), now() - before);
+        println!("part1: {}\ttook: {}", spinlock.result(), now() - before);
     }
     {
-        return;
         let before = now();
-        let mut spinlock = Spinlock::new(50_000_001);
+        let mut pos = 0;
+        let mut result = 0;
+        // Using a spinlock in memory is too expensive, just simulate it.
         for value in 1..50_000_001 {
-            spinlock.step_forward(INPUT, value);
+            // Push the position based on the stepping, modulo with the value
+            // (which is otherwise the size of the buffer - 1).
+            pos = (pos + INPUT) % value + 1;
+            // If we're at the beginning, part the value as being a possible result.
+            if pos == 1 {
+                result = value;
+            }
         }
-        println!("part1: {}\ttook: {}", spinlock.result2(), now() - before);
+        println!("part1: {}\ttook: {}", result, now() - before);
     }
 }
 
@@ -84,7 +86,7 @@ mod tests {
             spinlock.step_forward(3, value);
         }
         assert_eq!(spinlock.buffer[spinlock.pos], 2017);
-        assert_eq!(spinlock.result1(), 638);
+        assert_eq!(spinlock.result(), 638);
     }
 }
 
