@@ -51,9 +51,9 @@ fn execute(instructions: &str, memory: &mut Memory) -> Option<i64> {
                 memory.insert(unwrap_char(&values[0]), val1);
             }
             "add" => {
+                let val0 = value_to_int(&values[0], &memory);
                 let val1 = value_to_int(&values[1], &memory);
-                let val = memory.get_mut(&unwrap_char(&values[0])).unwrap();
-                *val = *val + val1;
+                memory.insert(unwrap_char(&values[0]), val0 + val1);
             }
             "mul" => {
                 let val0 = value_to_int(&values[0], &memory);
@@ -61,9 +61,9 @@ fn execute(instructions: &str, memory: &mut Memory) -> Option<i64> {
                 memory.insert(unwrap_char(&values[0]), val0 * val1);
             }
             "mod" => {
+                let val0 = value_to_int(&values[0], &memory);
                 let val1 = value_to_int(&values[1], &memory);
-                let val = memory.get_mut(&unwrap_char(&values[0])).unwrap();
-                *val = *val % val1;
+                memory.insert(unwrap_char(&values[0]), val0 % val1);
             }
             "snd" => {
                 last_sound = value_to_int(&values[0], &memory);
