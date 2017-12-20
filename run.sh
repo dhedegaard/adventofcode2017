@@ -8,7 +8,7 @@ find . \
 do
     echo "*** $fname ***"
     cd $fname
-    cargo test -q
+    cargo test -q --release
     cargo run -q --release
     cd ..
 done
