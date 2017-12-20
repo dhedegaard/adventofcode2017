@@ -151,7 +151,7 @@ fn part1(particles: &mut Vec<Particle>) -> usize {
 }
 
 fn part2(particles: &mut Vec<Particle>) -> usize {
-    for _ in 0..5_000 {
+    for _ in 0..500 {
         // Check for collisions.
         let collision_positions = {
             let mut result = HashSet::new();
@@ -229,7 +229,7 @@ p=<4,0,0>, v=<0,0,0>, a=<-2,0,0>";
     }
 
     #[test]
-    fn test_result1() {
+    fn test_result2() {
         let mut particles = parse(&get_input());
         assert_eq!(part2(&mut particles), 648);
     }
