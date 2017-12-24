@@ -68,6 +68,9 @@
 		},
 		{
 			"path": "day23"
+		},
+		{
+			"path": "day24"
 		}
 	],
 	"extensions": {
