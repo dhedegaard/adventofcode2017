@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
+set -x
 
 find . \
   -maxdepth 1 \
